@@ -1,101 +1,93 @@
-import Image from "next/image";
+"use client"
+import { Card, CardContent } from '@/components/ui/card';
+import DATA from './data.json'
+import { Input } from '@/components/ui/input';
+import GradientMoon from "./GradientMoon";
+import Image from 'next/image';
+import CineverseLogo from "./../../public/cineverse-logo.png"
+import { cn } from '@/lib/utils';
+import { motion, useMotionValueEvent, useScroll, useSpring } from "motion/react"
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { scrollY } = useScroll()
+  const scrollYValue = useSpring(100, { duration: 0.8, stiffness: 50 })
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      const searchSection = document.querySelector('#catch-phrase');
+      if (searchSection) {
+        searchSection.scrollIntoView({ behavior: 'smooth', });
+      }
+    }
+  };
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const invertedScrollYValue = Math.max(0, 100 - latest)
+    scrollYValue.set(invertedScrollYValue < 0.5 ? 0 : invertedScrollYValue)
+  })
+
+  return (
+    <div className="hero-content min-h-screen flex flex-col bg-black text-white">
+      <div className="flex flex-col items-center">
+        <div className="relative w-screen h-[800px] sm:h-[1600px] overflow-hidden">
+          <div className="absolute w-screen h-[1020px]"
+            style={{
+              background: 'url("https://r0yywfiqn7.ufs.sh/f/YrzlcDBoZLWDB6MGArhcpWxf9Zr2ohmNYJTkKX4M6IGAjEiR") no-repeat center',
+              backgroundSize: '100% 100%',
+              flexShrink: 0
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+          </div>
+          <div className="w-[1459px] h-[1461px] top-[186px] sm:top-[184px]  relative left-1/2 -translate-x-1/2  ">
+            <div className="size-full relative"
+              style={{
+                transform: 'rotate(180deg)',
+                zIndex: 4,
+                flexShrink: 0,
+                borderRadius: '100%',
+                opacity: 0.4,
+                mixBlendMode: 'luminosity',
+                rotate: '180deg',
+                background: 'radial-gradient(60.42% 60.42% at 50.02% 60.42%, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.00) 69.42%, rgba(255, 255, 255, 0.08) 75.33%, rgba(255, 255, 255, 0.13) 80.42%, rgba(255, 255, 255, 0.31) 86.39%, rgba(255, 255, 255, 0.57) 92.19%, #FFF 100%)',
+                boxShadow: '0px -20px 40px 0px rgba(255, 255, 255, 0.60)'
+              }}>
+              <GradientMoon />
+              <div className="absolute bottom-0 w-full h-96 bg-gradient-to-t from-black to-transparent"></div>
+            </div>
+            <div className="absolute z-50 left-1/2 -translate-x-1/2 -top-8 flex flex-col items-center ">
+              <div className="relative size-20">
+                <Image src={CineverseLogo} unoptimized alt="logo" fill className=' rounded-full overflow-hidden' />
+              </div>
+              <h2 className="text-white text-xl sm:text-2xl text-center font-sans font-semibold">Cineverse</h2>
+            </div>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className="absolute top-[284px] sm:top-[286px] flex flex-col items-center gap-8 sm:gap-12 px-6 sm:p-0">
+          <motion.p
+            id="catch-phrase"
+            style={{
+              height: scrollYValue,
+              opacity: scrollYValue
+            }}
+            className={cn("w-full h-fit sm:w-[50%] origin-top text-3xl sm:text-5xl font-bold text-center mt-6 sm:mt-12 bg-gradient-to-r from-white via-gray-50 to-transparent bg-clip-text text-transparent")}>A search away from your favorite movie</motion.p>
+
+          <div
+            key="input-search"
+            className="flex justify-center items-center w-full transition-all"
+          >
+            <Input onKeyDown={handleKeyPress} placeholder='Search a movie' className='w-auto  min-w-full sm:min-w-[40%] rounded-full h-12 text-white text-xl font-medium font-sans' />
+          </div>
+          <div id="movie-contents" className="flex flex-wrap justify-center p-8 pb-20 gap-16 sm:p-20 sm:pt-8 font-[family-name:var(--font-geist-sans)]">
+            {DATA.map((item, index) => (
+              <Card key={index} className="card  overflow-hidden rounded border-none">
+                <CardContent className='relative h-72 w-48'>
+                  <Image src={item.Poster} alt="poster" fill className='' />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div >
   );
 }
